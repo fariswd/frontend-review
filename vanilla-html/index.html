@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+  </head>
+  <body>
+    <h1>this is list of planes</h1>
+    <form action="index.html" method="post">
+      <input type="text" name="name" id="name" value="" placeholder="name">
+      <input type="text" name="desc" id="desc" value="" placeholder="desc">
+      <button class="add" type="submit" value="submit">Submit</button>
+    </form>
+    <div class="list">
+    </div>
+    <a class="delete" id="${i+1}" href="#">Delete</a>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+      axios.get('http://localhost:3001/plane')
+      .then(({ data }) => {
+        data.planes.forEach((plane, i) => {
+          $(".list").append(`
+            <h3>${i+1}. ${plane.name}, desc: ${plane.desc} <span><a class="delete" href="/del/#${plane.id}">Delete</a></span></h3>
+          `);
+        })
+      })
+      .catch(err => console.log(err))
+
+      $(".add").click(function(event) {
+        event.preventDefault();
+        var obj = {
+          name: $('#name').val(),
+          desc: $('#desc').val()
+        }
+        axios.post('http://localhost:3001/plane', obj)
+        .then(() => {
+          location.reload();
+        })
+        .catch(err => console.log(err))
+      });
+
+      // $( document ).ready(function() {
+      //   $("a[class='delete']").click(function(event) {
+      //     var id = window.location.hash.split('#')[1]
+      //     console.log(id)
+          // axios.delete('http://localhost:3001/plane/' + id)
+          // .then (() => {
+            // location.reload();
+          // })
+          // .catch (err => {
+            // location.reload();
+          // })
+      //   })
+      // });
+    </script>
+  </body>
+</html>
